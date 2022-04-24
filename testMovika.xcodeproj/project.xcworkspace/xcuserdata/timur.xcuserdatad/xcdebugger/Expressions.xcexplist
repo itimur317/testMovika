@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "TransformSVG.converterStringToPath(from:):TransformSVG.swift">
+      </ContextState>
+      <ContextState
+         contextName = "TransformSVG.convertM(from:shape:):TransformSVG.swift">
+      </ContextState>
+      <ContextState
+         contextName = "TransformSVG.convertC(from:):TransformSVG.swift">
+      </ContextState>
+      <ContextState
+         contextName = "TransformSVG.convertML(from:):TransformSVG.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Double(dim)">
+            </PersistentString>
+            <PersistentString
+               value = "point[0]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "TransformSVG.transform(name:):TransformSVG.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "svg[startIndex]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

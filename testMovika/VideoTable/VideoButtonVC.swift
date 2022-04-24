@@ -9,15 +9,16 @@ import UIKit
 import AVKit
 import AVFoundation
 
-protocol VideoTableVCProtocol: AnyObject {
+protocol VideoButtonVCProtocol: AnyObject {
     func openVideo()
 }
 
-final class VideoTableVC: UIViewController, VideoTableVCProtocol  {
+final class VideoButtonVC: UIViewController {
     
-    var presenter: VideoTablePresenterProtocol
+    var presenter: VideoButtonPresenterProtocol
+    var pathShape = UIBezierPath()
     
-    init(presenter: VideoTablePresenterProtocol){
+    init(presenter: VideoButtonPresenterProtocol){
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
@@ -25,8 +26,8 @@ final class VideoTableVC: UIViewController, VideoTableVCProtocol  {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    let safeAreaView = UIView()
+    
+    let curveView = CurveView()
     
     
     override func viewDidLoad() {
@@ -36,13 +37,14 @@ final class VideoTableVC: UIViewController, VideoTableVCProtocol  {
         navigationController?.topViewController?.title = "Videos"
         view.backgroundColor = .white
         
-        safeAreaView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(safeAreaView)
+        curveView.translatesAutoresizingMaskIntoConstraints = false
+        curveView.backgroundColor = .red
+        view.addSubview(curveView)
         
-        safeAreaView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
-        safeAreaView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-        safeAreaView.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor).isActive = true
-        safeAreaView.rightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor).isActive = true
+        curveView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
+        curveView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        curveView.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor).isActive = true
+        curveView.rightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor).isActive = true
         
         if UIDevice.current.orientation.isLandscape {
             videoButton = UIButton(frame: CGRect(x: view.bounds.height / 2 - 50,
@@ -65,7 +67,7 @@ final class VideoTableVC: UIViewController, VideoTableVCProtocol  {
         videoButton.backgroundColor = UIColor(red: 0.40, green: 0.29, blue: 0.87, alpha: 1.00)
         videoButton.addTarget(self, action: #selector(didTapVideoButton(_:)), for: .touchUpInside)
         view.addSubview(videoButton)
-
+        
     }
     
     @objc
@@ -81,15 +83,20 @@ final class VideoTableVC: UIViewController, VideoTableVCProtocol  {
             alert.addAction(UIAlertAction(title: "Ок", style: .cancel, handler: nil))
             present(alert, animated: true)
         }
+        
+        let transform = TransformSVG()
+        transform.transform(name: "1_1")
     }
     
-    
+}
+
+extension VideoButtonVC: VideoButtonVCProtocol {
     func openVideo() {
         let player = AVPlayer(url: self.presenter.videosURL[0])
         let layer = AVPlayerLayer(player: player)
         
         layer.frame = CGRect(x: 0, y: 0, width: view.bounds.height, height: view.bounds.width)
-    
+        
         layer.frame = view.frame
         layer.videoGravity = .resizeAspectFill
         view.layer.addSublayer(layer)
@@ -97,6 +104,3 @@ final class VideoTableVC: UIViewController, VideoTableVCProtocol  {
         player.play()
     }
 }
-
-
-
