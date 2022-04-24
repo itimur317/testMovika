@@ -14,7 +14,7 @@ final class CurveView: UIView {
         let path = UIBezierPath()
         
         let transformer = TransformSVG()
-        let paths = transformer.transform(name: "1_1")
+        let paths = transformer.transform(name: "1_\(CurrentVideoNumber.shared.number)")
         for curPath in paths {
             switch curPath.0 {
             case "M":

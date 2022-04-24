@@ -32,6 +32,7 @@ final class VideoButtonVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        CurrentVideoNumber.shared.number = 1
         
         var videoButton = UIButton()
         navigationController?.topViewController?.title = "Videos"
@@ -84,8 +85,7 @@ final class VideoButtonVC: UIViewController {
             present(alert, animated: true)
         }
         
-        let transform = TransformSVG()
-        transform.transform(name: "1_1")
+        
     }
     
 }
