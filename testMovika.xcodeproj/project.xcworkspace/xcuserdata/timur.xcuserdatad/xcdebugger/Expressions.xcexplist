@@ -25,6 +25,9 @@
             <PersistentString
                value = "tau/200">
             </PersistentString>
+            <PersistentString
+               value = "date">
+            </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState

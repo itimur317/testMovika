@@ -32,7 +32,7 @@ final class VideoButtonVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        CurrentVideoNumber.shared.number = 4
+        CurrentInformation.shared.videoNumber = 1
         
         var videoButton = UIButton()
         navigationController?.topViewController?.title = "Videos"
@@ -77,7 +77,6 @@ final class VideoButtonVC: UIViewController {
         
         // UIDevice.current.orientation.isLandscape работал с проблемами при загрузке
         // (частая проблема на форумах)
-        
         if UIScreen.main.bounds.width > UIScreen.main.bounds.height {
             self.presenter.didTapVideoButton()
         } else {
@@ -85,8 +84,6 @@ final class VideoButtonVC: UIViewController {
             alert.addAction(UIAlertAction(title: "Ок", style: .cancel, handler: nil))
             present(alert, animated: true)
         }
-        
-        
     }
     
 }
@@ -103,18 +100,17 @@ extension VideoButtonVC: VideoButtonVCProtocol {
         
         navigationController?.topViewController?.title = ""
         player.play()
-        
+        CurrentInformation.shared.paused = false
         
         let asset = AVAsset(url: self.presenter.videosURL[0])
         let duration = asset.duration.seconds
         let randomTime = Double.random(in: 0..<duration)
-        print(randomTime)
         player.perform(#selector(player.pause), with: nil, afterDelay: randomTime)
+        CurrentInformation.shared.paused = true
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + randomTime) {
             self.curveView.isHidden = false
             self.view.addSubview(self.curveView)
         }
     }
-    
-    
 }

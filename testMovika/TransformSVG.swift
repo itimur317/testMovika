@@ -43,10 +43,12 @@ final class TransformSVG: TransformSVGProtocol {
         if str[str.startIndex] == " " {
             point[0].remove(at: point[0].startIndex)
         }
+        
         let index = point[1].index(point[1].endIndex, offsetBy: -1)
         if point[1][index] == " " {
             point[1].remove(at: index)
         }
+        
         point[0].remove(at: point[0].startIndex)
         var coordinates: [Double] = []
         for dim in point {
@@ -87,6 +89,7 @@ final class TransformSVG: TransformSVGProtocol {
         var partsOfPath: [(String, [CGPoint])] = []
         var pathsString: [String] = []
         var currentString = ""
+        
         for i in 0..<str.count {
             let curIndex = str.index(str.startIndex, offsetBy: i)
             
@@ -104,14 +107,12 @@ final class TransformSVG: TransformSVGProtocol {
             switch str[str.startIndex] {
             case "M":
                 let point = self.convertML(from: str)
-                print(point)
                 partsOfPath += [("M", [point])]
             case "L":
                 let point = self.convertML(from: str)
                 partsOfPath += [("L", [point])]
             case "C":
                 let points = self.convertC(from: str)
-                print(points)
                 partsOfPath += [("C", points)]
             default:
                 print("smth wrong")
@@ -134,13 +135,13 @@ final class TransformSVG: TransformSVGProtocol {
                 if svg[startIndex..<curIndex] == word {
                     var endIndex = curIndex
                     var k = 0
+                    
                     // to highlight Substring in String of SVG
                     while svg[svg.index(curIndex, offsetBy: k)] != "\"" {
                         endIndex = svg.index(curIndex, offsetBy: k)
                         pathInString += [svg[endIndex]]
                         k += 1
                     }
-                    print(pathInString)
                     break
                 }
             }
@@ -150,7 +151,7 @@ final class TransformSVG: TransformSVGProtocol {
     
     
     private func converterStringToPolyline(from str: String) -> [(String, [CGPoint])] {
-        var coordinates = str.split(separator: " ")
+        let coordinates = str.split(separator: " ")
         var partsOfPath: [(String, [CGPoint])] = []
         var coords: [Double] = []
         for coordinate in coordinates {
@@ -174,14 +175,11 @@ final class TransformSVG: TransformSVGProtocol {
             return [("", [CGPoint(x: 0, y: 0)])]
         }
         // cut to convert
-//        print(svg)
         if svg.contains("<path d=\"") {
-//            print(self.highlightSubstringPath(from: svg))
             let highlighted = self.highlightSubstring(from: svg, word: "<path d=\"")
             return self.converterStringToPath(from: highlighted)
         } else {
             let highlighted = self.highlightSubstring(from: svg, word: "points=\"")
-//            print(self.converterStringToPolyline(from: highlighted))
             return self.converterStringToPolyline(from: highlighted)
         }
         

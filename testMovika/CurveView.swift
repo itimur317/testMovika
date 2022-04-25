@@ -15,9 +15,9 @@ final class CurveView: UIView {
         let path = UIBezierPath()
         var startPoint = CGPoint(x: 0, y: 0)
         path.move(to: CGPoint(x: 0, y: 0))
-
+        
         let transformer = TransformSVG()
-        let paths = transformer.transform(name: "1_\(CurrentVideoNumber.shared.number)")
+        let paths = transformer.transform(name: "1_\(CurrentInformation.shared.curveNumber)")
         
         var pathPoints: [CGPoint] = []
         
@@ -36,9 +36,11 @@ final class CurveView: UIView {
                 // calculate points of line
                 let deltaX = endPoint.x - startPoint.x
                 let deltaY = endPoint.y - startPoint.y
-                for t in 0...200 {
-                    pathPoints.append(CGPoint(x: startPoint.x + CGFloat(t / 200) * deltaX,
-                                              y: startPoint.y + CGFloat(t / 200) * deltaY))
+                for t1 in 0...200 {
+                    let tau = Int(t1)
+                    let t: Double = Double(tau) * 0.005
+                    pathPoints.append(CGPoint(x: startPoint.x + CGFloat(t) * deltaX,
+                                              y: startPoint.y + CGFloat(t) * deltaY))
                 }
             case "C":
                 let startPoint = path.currentPoint
@@ -73,9 +75,7 @@ final class CurveView: UIView {
                 print("smth wrong on curve")
             }
         }
-//        let endPoint = path.currentPoint
-
-        print(pathPoints.count)
+        amountOfPoints = pathPoints.count
         redLine = pathPoints
         
         UIColor.white.set()
@@ -104,9 +104,7 @@ final class CurveView: UIView {
         context.strokePath()
         
         // redLine on white
-
         guard let contextRed = UIGraphicsGetCurrentContext() else { return }
-        
         contextRed.setLineWidth(4)
         contextRed.setStrokeColor(.init(red: 0.72, green: 0, blue: 0, alpha: 1))
         for (i, p) in redLine.enumerated() where i < iterator {
@@ -120,26 +118,37 @@ final class CurveView: UIView {
         contextRed.strokePath()
     }
     
+    var amountOfPoints: Int = 0
     var iterator: Int = 0
     var line: [CGPoint] = []
     var redLine: [CGPoint] = []
-  
+    var sumForMetric: Double = 0
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let point = touches.first?.location(in: nil) else {
             return
         }
         
-        let deltaX = point.x - redLine[iterator].x
-        let deltaY = point.y - redLine[iterator].y
-        if deltaX * deltaX + deltaY * deltaY < 400 {
-            iterator += 1
+        if iterator != amountOfPoints {
+            let deltaX = point.x - redLine[iterator].x
+            let deltaY = point.y - redLine[iterator].y
+            if deltaX * deltaX + deltaY * deltaY < 400 {
+                sumForMetric += sqrt(deltaX * deltaX + deltaY * deltaY)
+                iterator += 1
+            }
+        } else {
+            print("\n\n\n\n")
+            print("*Переход на следующее видео/отжатие паузы*")
+            print("Не успел добавить:С")
+            print("Используется метод наим квадратов")
+            print("Высчитывается среднее от квадратов расстояний")
+            print("Чем меньше сумма квадратов расстояний, деленная на кол-во точек, тем лучше точность")
+            print("Точность нарисованной кривой: \(sumForMetric / Double(amountOfPoints))")
         }
         
         line.append(point)
         setNeedsDisplay()
     }
-
 }
 
 
