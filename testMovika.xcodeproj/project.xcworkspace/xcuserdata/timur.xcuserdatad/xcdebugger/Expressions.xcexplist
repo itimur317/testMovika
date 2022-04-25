@@ -6,10 +6,34 @@
          contextName = "TransformSVG.converterStringToPath(from:):TransformSVG.swift">
       </ContextState>
       <ContextState
+         contextName = "TransformSVG.transform(name:):TransformSVG.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "svg[startIndex]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "TransformSVG.convertM(from:shape:):TransformSVG.swift">
       </ContextState>
       <ContextState
          contextName = "TransformSVG.convertC(from:):TransformSVG.swift">
+      </ContextState>
+      <ContextState
+         contextName = "CurveView.draw(_:):CurveView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "tau/200">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "VideoButtonVC.openVideo():VideoButtonVC.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "player.timeControlStatus">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "TransformSVG.convertML(from:):TransformSVG.swift">
@@ -19,14 +43,6 @@
             </PersistentString>
             <PersistentString
                value = "point[0]">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "TransformSVG.transform(name:):TransformSVG.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "svg[startIndex]">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

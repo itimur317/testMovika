@@ -32,14 +32,15 @@ final class VideoButtonVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        CurrentVideoNumber.shared.number = 1
+        CurrentVideoNumber.shared.number = 4
         
         var videoButton = UIButton()
         navigationController?.topViewController?.title = "Videos"
         view.backgroundColor = .white
         
+        curveView.isHidden = true
         curveView.translatesAutoresizingMaskIntoConstraints = false
-        curveView.backgroundColor = .red
+        curveView.backgroundColor = UIColor.blue.withAlphaComponent(0)
         view.addSubview(curveView)
         
         curveView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
@@ -96,11 +97,24 @@ extension VideoButtonVC: VideoButtonVCProtocol {
         let layer = AVPlayerLayer(player: player)
         
         layer.frame = CGRect(x: 0, y: 0, width: view.bounds.height, height: view.bounds.width)
-        
         layer.frame = view.frame
         layer.videoGravity = .resizeAspectFill
         view.layer.addSublayer(layer)
+        
         navigationController?.topViewController?.title = ""
         player.play()
+        
+        
+        let asset = AVAsset(url: self.presenter.videosURL[0])
+        let duration = asset.duration.seconds
+        let randomTime = Double.random(in: 0..<duration)
+        print(randomTime)
+        player.perform(#selector(player.pause), with: nil, afterDelay: randomTime)
+        DispatchQueue.main.asyncAfter(deadline: .now() + randomTime) {
+            self.curveView.isHidden = false
+            self.view.addSubview(self.curveView)
+        }
     }
+    
+    
 }

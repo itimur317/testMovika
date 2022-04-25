@@ -27,32 +27,6 @@ final class TransformSVG: TransformSVGProtocol {
         }
     }
     
-    // func to highlight information about curve
-    private func highlightSubstringPath(from svg: String) -> String {
-        var pathInString = ""
-        //      find "<path d=" in StringSVG
-        for i in 0..<svg.count {
-            let startIndex = svg.index(svg.startIndex, offsetBy: i)
-            if svg[startIndex] == "<" {
-                let curIndex = svg.index(startIndex, offsetBy: 9)
-                if svg[startIndex..<curIndex] == "<path d=\"" {
-                    print("popa")
-                    var endIndex = curIndex
-                    var k = 0
-                    // to highlight Substring in String of SVG
-                    while svg[svg.index(curIndex, offsetBy: k)] != "\"" {
-                        endIndex = svg.index(curIndex, offsetBy: k)
-                        pathInString += [svg[endIndex]]
-                        k += 1
-                    }
-                    print(pathInString)
-                    break
-                }
-            }
-        }
-        return pathInString
-    }
-    
     
     private func isLetter(char: Character) -> Bool {
         if (char == "M" || char == "L" ||
@@ -149,23 +123,67 @@ final class TransformSVG: TransformSVGProtocol {
     }
     
     
+    // func to highlight information about curve
+    private func highlightSubstring(from svg: String, word: String) -> String {
+        var pathInString = ""
+        //      find "<path d=" in StringSVG
+        for i in 0..<svg.count {
+            let startIndex = svg.index(svg.startIndex, offsetBy: i)
+            if svg[startIndex] == word[word.startIndex] {
+                let curIndex = svg.index(startIndex, offsetBy: word.count)
+                if svg[startIndex..<curIndex] == word {
+                    var endIndex = curIndex
+                    var k = 0
+                    // to highlight Substring in String of SVG
+                    while svg[svg.index(curIndex, offsetBy: k)] != "\"" {
+                        endIndex = svg.index(curIndex, offsetBy: k)
+                        pathInString += [svg[endIndex]]
+                        k += 1
+                    }
+                    print(pathInString)
+                    break
+                }
+            }
+        }
+        return pathInString
+    }
+    
+    
+    private func converterStringToPolyline(from str: String) -> [(String, [CGPoint])] {
+        var coordinates = str.split(separator: " ")
+        var partsOfPath: [(String, [CGPoint])] = []
+        var coords: [Double] = []
+        for coordinate in coordinates {
+            if let coord = Double(coordinate) {
+                coords.append(coord)
+            }
+        }
+        for i in 0..<coords.count where i % 2 == 0 {
+            if i == 0 {
+                partsOfPath.append(("M", [CGPoint(x: coords[i], y: coords[i + 1])]))
+            } else {
+                partsOfPath.append(("L", [CGPoint(x: coords[i], y: coords[i + 1])]))
+            }
+        }
+        return partsOfPath
+    }
+    
     
     func transform(name: String) -> [(String, [CGPoint])] {
         guard let svg = self.SVGToString(name: name) else {
             return [("", [CGPoint(x: 0, y: 0)])]
         }
         // cut to convert
-        print(svg)
-        
+//        print(svg)
         if svg.contains("<path d=\"") {
-            print(self.highlightSubstringPath(from: svg))
-            let highlighted = self.highlightSubstringPath(from: svg)
+//            print(self.highlightSubstringPath(from: svg))
+            let highlighted = self.highlightSubstring(from: svg, word: "<path d=\"")
             return self.converterStringToPath(from: highlighted)
         } else {
-            print("py")
+            let highlighted = self.highlightSubstring(from: svg, word: "points=\"")
+//            print(self.converterStringToPolyline(from: highlighted))
+            return self.converterStringToPolyline(from: highlighted)
         }
-        
-        return [("", [CGPoint(x: 0, y: 0)])]
         
     }
 }
