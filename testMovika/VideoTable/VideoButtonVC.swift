@@ -43,10 +43,7 @@ final class VideoButtonVC: UIViewController {
         curveView.backgroundColor = UIColor.blue.withAlphaComponent(0)
         view.addSubview(curveView)
         
-        curveView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
-        curveView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-        curveView.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor).isActive = true
-        curveView.rightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor).isActive = true
+        curveView.frame = view.bounds
         
         if UIDevice.current.orientation.isLandscape {
             videoButton = UIButton(frame: CGRect(x: view.bounds.height / 2 - 50,

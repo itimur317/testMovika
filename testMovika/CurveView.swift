@@ -130,12 +130,27 @@ final class CurveView: UIView {
         }
         
         if iterator != amountOfPoints {
-            let deltaX = point.x - redLine[iterator].x
-            let deltaY = point.y - redLine[iterator].y
-            if deltaX * deltaX + deltaY * deltaY < 400 {
+            // 1nd variant
+//            let deltaX = point.x - redLine[iterator].x
+//            let deltaY = point.y - redLine[iterator].y
+//            if deltaX * deltaX + deltaY * deltaY < 400 {
+//                sumForMetric += sqrt(deltaX * deltaX + deltaY * deltaY)
+//                iterator += 1
+//            }
+            
+            // 2nd variant
+            var deltaX = point.x - redLine[iterator].x
+            var deltaY = point.y - redLine[iterator].y
+            while deltaX * deltaX + deltaY * deltaY < 400 {
                 sumForMetric += sqrt(deltaX * deltaX + deltaY * deltaY)
                 iterator += 1
+                if iterator == amountOfPoints {
+                    break
+                }
+                deltaX = point.x - redLine[iterator].x
+                deltaY = point.y - redLine[iterator].y
             }
+            // end of 2nd variant
         } else {
             print("\n\n\n\n")
             print("*Переход на следующее видео/отжатие паузы*")
